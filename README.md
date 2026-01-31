@@ -107,13 +107,23 @@ npm run dev
 - `POST /api/iot/aggregate/:tokenId` - Aggregate and push to chain
 - `GET /api/iot/buffer/:tokenId` - Get buffered data
 
+### EUDR Compliance
+- `GET /api/dds/generate/:tokenId` - Generate Annex II Due Diligence Statement (JSON)
+- `POST /api/batches/validate-geo` - Validate GeoJSON compliance
+- `POST /api/batches/upload-doc` - Upload legality evidence to IPFS
+
 ## Smart Contract Features
 
-- **ERC-721 NFTs**: Each batch is a unique NFT
+- **ERC-721 NFTs**: Each batch is a unique NFT (SupplyChainNFT)
+- **EUDR Compliance**: 
+    - **Geolocation**: Plot-level traceability using GeoJSON (WGS-84)
+    - **Deforestation-Free**: Automatic and manual verification checks
+    - **Legality Proofs**: IPFS-linked legality documentation (tenure, permits)
+    - **Due Diligence (DDS)**: TRACES NT-ready export (Regulation 2023/1115)
 - **Role-Based Access**: MINTER_ROLE, ORACLE_ROLE via OpenZeppelin
-- **Batch Data**: Origin, supplier, carbon footprint, temperature, humidity
+- **Batch Data**: Origin, supplier, carbon footprint, temperature, humidity, geolocationHash
 - **History Tracking**: Immutable on-chain history
-- **Compliance Checks**: Carbon threshold verification
+- **Compliance Checks**: Carbon threshold and EUDR verification status
 
 ## Deployment
 
@@ -136,12 +146,23 @@ npm run build
 # Deploy with start command: node dist/index.js
 ```
 
-## Base Network Config
+## Demo Flow
 
-| Network | Chain ID | RPC URL |
-|---------|----------|---------|
-| Base Sepolia | 84532 | https://sepolia.base.org |
-| Base Mainnet | 8453 | https://mainnet.base.org |
+1. **Minting**: Upload a GeoJSON file or enter plot coordinates in the [Mint Batch](file:///frontend/src/pages/MintBatch.tsx) page. The system validates coordinate precision and polygon requirements.
+2. **Dashboard**: View the [Dashboard](file:///frontend/src/pages/Dashboard.tsx) to see real-time compliance badges (🟢/🟡/🔴) indicating EUDR readiness across all active batches.
+3. **Traceability**: Click "View Details" to see the [Batch Detail](file:///frontend/src/pages/BatchDetail.tsx) map, which visualizes the exact production plots.
+4. **DDS Export**: Download the official Annex II JSON to use for TRACES NT submission.
+
+## TRACES NT Integration
+
+> [!NOTE]
+> The generated DDS JSON mirrors Annex II and can be used to pre-populate submissions in the official [EU TRACES NT system](https://eudr.webcloud.ec.europa.eu/tracesnt/login) (registration required). 
+
+For full automated submission, this system can be extended with the TRACES NT API integration (requires EU Login/auth).
+
+## Multi-Plot Support (Smallholders)
+
+The system supports `FeatureCollection` inputs, allowing a single batch to link multiple smallholder plots. This is critical for Nigerian cocoa cooperatives where one export batch often consists of cocoa from dozens of small farms.
 
 ## License
 

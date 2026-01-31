@@ -5,10 +5,10 @@ import {
     Leaf,
     Activity,
     ArrowUpRight,
-    Clock,
     MapPin
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { ComplianceStatusDot } from '../components/ComplianceBadge'
 import {
     AreaChart,
     Area,
@@ -204,14 +204,17 @@ export default function Dashboard() {
                                     <td className="p-4 font-mono text-sm">{batch.supplier}</td>
                                     <td className="p-4">{batch.carbon.toLocaleString()}</td>
                                     <td className="p-4">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${batch.status === 'Delivered'
+                                        <div className="flex items-center gap-2">
+                                            <ComplianceStatusDot status={batch.id === 1 ? 'compliant' : batch.id === 2 ? 'pending' : 'non_compliant'} />
+                                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${batch.status === 'Delivered'
                                                 ? 'bg-green-500/20 text-green-400'
                                                 : batch.status === 'In Transit'
                                                     ? 'bg-blue-500/20 text-blue-400'
                                                     : 'bg-yellow-500/20 text-yellow-400'
-                                            }`}>
-                                            {batch.status}
-                                        </span>
+                                                }`}>
+                                                {batch.status}
+                                            </span>
+                                        </div>
                                     </td>
                                     <td className="p-4">
                                         <Link
